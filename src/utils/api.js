@@ -65,7 +65,7 @@ import { getAccessToken } from "./setAuthToken";
 // import store from "../store";
 // import { LOGOUT } from "../Actions/Types";
 
-let baseURL = "https://cvj0m9w7-2001.inc1.devtunnels.ms/api/";
+const baseURL = "https://cvj0m9w7-2001.inc1.devtunnels.ms/api/";
 // if (window.location.hostname === "localhost") {
 //   baseURL = "http://13.60.156.232:2001/api";
 // } else {
