@@ -60,3 +60,48 @@
 // // });
 
 // export default api;
+import axios from "axios";
+import { getAccessToken } from "./setAuthToken";
+// import store from "../store";
+// import { LOGOUT } from "../Actions/Types";
+
+let baseURL = "";
+if (window.location.hostname === "localhost") {
+  baseURL = "http://13.60.156.232:2001/api";
+} else {
+  baseURL = "http://13.60.156.232:2001/api";
+}
+
+const api = axios.create({
+  baseURL: baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// Adding a request interceptor to attach token dynamically
+api.interceptors.request.use(
+  async (config) => {
+    const token = await getAccessToken(); // Lazy loading the token
+    if (token) {
+      config.headers["x-sh-auth"] = token.token;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Adding a response interceptor for handling 401 errors
+api.interceptors.response.use(
+  (response) => response, // If the response is successful, just return it
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.log("Unauthorized - handle token expiration or logout");
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
